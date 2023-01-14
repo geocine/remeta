@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell]
+
+[HKEY_CLASSES_ROOT\*\shell\Remove Metadata]
+@="Remove Metadata"
+
+[HKEY_CLASSES_ROOT\*\shell\Remove Metadata\command]
+@="\"D:\\PL\\ReMeta\\remeta.exe\" \"clear\" \"%1\""
