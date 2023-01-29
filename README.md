@@ -15,7 +15,44 @@ https://user-images.githubusercontent.com/507464/215329121-06af4bf1-341a-4970-82
 
 Download `remeta.exe` from the [Releases page](https://github.com/geocine/remeta/releases) and place it in any folder.
 
-Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`. Then run `add.reg` to add ReMeta to the Windows context menu.
+Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`.
+
+So if you downloaded `remeta.exe` to `C:\\tools` folder you need to change `add.reg` like this
+
+```diff
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell]
+
+[HKEY_CLASSES_ROOT\*\shell\ReMeta]
+"MUIVerb"="ReMeta"
+"AppliesTo"=".png"
+"SubCommands"="ReMeta.clear;ReMeta.get"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.clear]
+@="Remove Metadata"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.clear\command]
+-@="D:\\SW\\bin\\remeta.exe remove \"%1\""
++@="C:\\tools\\remeta.exe remove \"%1\""
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.get]
+@="Get Metadata"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.get\command]
+-@="D:\\SW\\bin\\remeta.exe read \"%1\""
++@="C:\\tools\\remeta.exe read \"%1\""
+
+```
+After you have modified and saved this just double click the `add.reg` file.
+
+Do you want to allow this app to make changes to your device? Yes (If asked)
+
+Then click Yes once this shows up
+
+![image](https://user-images.githubusercontent.com/507464/215338709-6cbb23c0-379c-4a9b-95d3-e74d0a5c1656.png)
+
+
 
 ## Uninstallation
 
