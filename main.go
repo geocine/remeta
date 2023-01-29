@@ -1,43 +1,34 @@
 package main
 
 import (
+	"bytes"
+	"encoding/binary"
+	"errors"
 	"fmt"
 	"image"
 	"image/png"
+	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
-	"syscall"
-	"unsafe"
 
-	"github.com/dsoprea/go-exif"
-	pngstructure "github.com/dsoprea/go-png-image-structure"
-	"golang.design/x/clipboard"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
 )
 
-type IfdEntry struct {
-	IfdPath     string                `json:"ifd_path"`
-	FqIfdPath   string                `json:"fq_ifd_path"`
-	IfdIndex    int                   `json:"ifd_index"`
-	TagId       uint16                `json:"tag_id"`
-	TagName     string                `json:"tag_name"`
-	TagTypeId   exif.TagTypePrimitive `json:"tag_type_id"`
-	TagTypeName string                `json:"tag_type_name"`
-	UnitCount   uint32                `json:"unit_count"`
-	Value       interface{}           `json:"value"`
-	ValueString string                `json:"value_string"`
+type PNG struct {
+	Prompt         string
+	NegativePrompt string
+	Steps          int
+	Sampler        string
+	CFGScale       int
+	Seed           int
+	Size           string
+	ModelHash      string
 }
-type IfdEntries map[string]IfdEntry
-
-var (
-	user32                  = syscall.NewLazyDLL("user32.dll")
-	messageBoxW             = user32.NewProc("MessageBoxW")
-	MB_OK                   = 0x00000000
-	MB_ICONINFORMATION      = 0x00000040
-	MB_SETFOREGROUND        = 0x00010000
-	MB_TOPMOST              = 0x00040000
-	MB_SERVICE_NOTIFICATION = 0x00200000
-)
 
 func RemoveMetadata(filePath string) error {
 
@@ -75,115 +66,108 @@ func RemoveMetadata(filePath string) error {
 	return png.Encode(outFile, img)
 }
 
-func ReadExif(filePath string) (exifData IfdEntries, err error) {
+func GetMetadata(r io.ReadSeeker) (result string, err error) {
+	// 5.2 PNG signature
+	const signature = "\x89PNG\r\n\x1a\n"
 
-	pmp := pngstructure.NewPngMediaParser()
-	cs, _ := pmp.ParseFile(filePath)
-	_, rawExif, exifErr := cs.Exif()
-	if exifErr != nil {
-		return nil, exifErr
+	// 5.3 Chunk layout
+	const crcSize = 4
+
+	// 8 is the size of both the signature and the chunk
+	// id (4 bytes) + chunk length (4 bytes).
+	// This is just a coincidence.
+	buf := make([]byte, 8)
+
+	var n int
+	n, err = r.Read(buf)
+	if err != nil {
+		print("error: ", err)
+		return "", err
 	}
 
-	print(rawExif)
+	if n != len(signature) || string(buf) != signature {
+		print("invalid PNG signature")
+		return "", errors.New("invalid PNG signature")
+	}
 
-	// Run the parse.
-	// im := exif.NewIfdMappingWithStandard()
-	// ti := exif.NewTagIndex()
+	for {
+		n, err = r.Read(buf)
+		if err != nil {
+			break
+		}
 
-	// entries := make(IfdEntries, 0)
-	// visitor := func(fqIfdPath string, ifdIndex int, tagId uint16,
-	// 	tagType exif.TagType, valueContext exif.ValueContext) (err error) {
-	// 	defer func() {
-	// 		if state := recover(); state != nil {
-	// 			err = log.Wrap(state.(error))
-	// 			log.Panic(err)
-	// 		}
-	// 	}()
+		if n != len(buf) {
+			break
+		}
 
-	// 	ifdPath, pathErr := im.StripPathPhraseIndices(fqIfdPath)
-	// 	if pathErr != nil {
-	// 		return pathErr
-	// 	}
+		length := binary.BigEndian.Uint32(buf[0:4])
+		chunkType := string(buf[4:8])
+		switch chunkType {
+		case "tEXt":
+			print("found tEXt chunk\n")
 
-	// 	it, tagErr := ti.Get(ifdPath, tagId)
-	// 	if tagErr != nil {
-	// 		if log.Is(tagErr, exif.ErrTagNotFound) {
-	// 			fmt.Printf("WARNING: Unknown tag: [%s] (%04x)\n",
-	// 				ifdPath, tagId)
-	// 			return nil
-	// 		} else {
-	// 			return tagErr
-	// 		}
-	// 	}
+			data := make([]byte, length)
+			_, err := r.Read(data)
+			if err != nil {
+				return "", err
+			}
 
-	// 	valueString := ""
-	// 	var value interface{}
-	// 	if tagType.Type() == exif.TypeUndefined {
-	// 		var undefErr error
-	// 		value, undefErr = valueContext.Undefined()
-	// 		if undefErr != nil {
-	// 			if undefErr == exif.ErrUnhandledUnknownTypedTag {
-	// 				value = nil
-	// 			} else {
-	// 				return nil
-	// 			}
-	// 		}
-	// 		valueString = fmt.Sprintf("%v", value)
-	// 	} else if tagType.Type() == exif.TypeByte {
-	// 		var byteErr error
-	// 		value, byteErr = valueContext.ReadBytes()
-	// 		if byteErr != nil {
-	// 			return byteErr
-	// 		}
-	// 	}
-	// 	var formatErr error
-	// 	valueString, formatErr = valueContext.FormatFirst()
-	// 	if formatErr != nil {
-	// 		return formatErr
-	// 	}
-	// 	if tagType.Type() == exif.TypeAscii {
-	// 		value = valueString
-	// 	}
+			separator := []byte{0}
+			separatorIndex := bytes.Index(data, separator)
+			if separatorIndex == -1 {
+				return "", errors.New("invalid tEXt chunk")
+			}
+			return string(data[separatorIndex+1:]), nil
 
-	// 	entry := IfdEntry{
-	// 		IfdPath:     ifdPath,
-	// 		FqIfdPath:   fqIfdPath,
-	// 		IfdIndex:    ifdIndex,
-	// 		TagId:       tagId,
-	// 		TagName:     it.Name,
-	// 		TagTypeId:   tagType.Type(),
-	// 		TagTypeName: tagType.Name(),
-	// 		UnitCount:   valueContext.UnitCount(),
-	// 		Value:       value,
-	// 		ValueString: valueString,
-	// 	}
-	// 	entries[it.Name] = entry
-	// 	return nil
-	// }
+		default:
+			// Discard the chunk length + CRC.
+			_, err := r.Seek(int64(length+crcSize), io.SeekCurrent)
+			if err != nil {
+				return "", err
+			}
+		}
+	}
 
-	// _, visitErr := exif.Visit(exif.IfdStandard, im, ti, rawExif, visitor)
-	// if visitErr != nil {
-	// 	return nil, visitErr
-	// }
-	// return entries, nil
-	return make(IfdEntries, 0), nil
+	return "", nil
 }
 
-func GetMetadata(filePath string) error {
+func (png *PNG) populateInfo(input string) {
+	// Split the input string into lines
+	lines := strings.Split(input, "\n")
+	// Split the first line into prompt and negative prompt
+	prompt := lines[0]
+	negativePrompt := lines[1]
 
-	// Read the EXIF data from the PNG data
-	exifData, err := ReadExif(filePath)
-	if err != nil {
-		return err
+	png.Prompt = prompt
+	png.NegativePrompt = strings.Trim(strings.Split(negativePrompt, ":")[1], " ")
+
+	nextLines := strings.Split(lines[2], ",")
+
+	// Iterate through the rest of the lines
+	for _, line := range nextLines {
+		// Split the line into key and value
+		parts := strings.Split(line, ":")
+		key := strings.Trim(parts[0], " ")
+		value := strings.Trim(parts[1], " ")
+		// Use a switch statement to set the appropriate field in the struct
+		switch key {
+		case "Steps":
+			i, _ := strconv.Atoi(value)
+			png.Steps = i
+		case "Sampler":
+			png.Sampler = value
+		case "CFG scale":
+			i, _ := strconv.Atoi(value)
+			png.CFGScale = i
+		case "Seed":
+			i, _ := strconv.Atoi(value)
+			png.Seed = i
+		case "Size":
+			png.Size = value
+		case "Model hash":
+			png.ModelHash = value
+		}
 	}
-
-	// Print the EXIF data
-	fmt.Println(exifData)
-
-	// fmt.Sprintf("%v", focalLength)
-	clipboard.Write(clipboard.FmtText, []byte("Hello"))
-
-	return nil
 
 }
 
@@ -203,15 +187,88 @@ func main() {
 			return
 		}
 
-		title, _ := syscall.UTF16PtrFromString("ReMeta - geocine")
-		message, _ := syscall.UTF16PtrFromString("Metadata successfully removed from image.")
-		flags := MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND | MB_TOPMOST | MB_SERVICE_NOTIFICATION
-		messageBoxW.Call(0, uintptr(unsafe.Pointer(message)), uintptr(unsafe.Pointer(title)), uintptr(flags))
+		a := app.New()
+
+		name := filepath.Base(filePath)
+
+		windowTitle := name + " - ReMeta by geocine"
+
+		// Create a new window
+		w := a.NewWindow(windowTitle)
+		w.Resize(fyne.NewSize(350, 100))
+		w.SetFixedSize(true)
+		w.CenterOnScreen()
+
+		content := container.NewCenter(widget.NewLabel("Metadata successfully removed from image."))
+
+		// Set the window content to the horizontal box layout
+		w.SetContent(content)
+		w.ShowAndRun()
+
 	} else if mode == "get" {
-		err := GetMetadata(filePath)
+		imgFile, err := os.Open(filePath)
 		if err != nil {
-			fmt.Println(err)
-			return
+			panic(err)
 		}
+		defer imgFile.Close()
+		text, _ := GetMetadata(imgFile)
+		png := PNG{}
+		png.populateInfo(text)
+
+		// Create a new Fyne app
+		a := app.New()
+
+		windowTitle := imgFile.Name() + " - ReMeta by geocine"
+		// Create a new window
+		w := a.NewWindow(windowTitle)
+		w.Resize(fyne.NewSize(600, 0))
+		w.CenterOnScreen()
+
+		// Create a new grid layout
+		// grid := container.New(layout.NewGridLayout(2))
+
+		form := &widget.Form{}
+
+		// Create a new label and textbox for each property in the struct
+
+		promptTextbox := widget.NewMultiLineEntry()
+		promptTextbox.SetText(png.Prompt)
+		promptTextbox.Wrapping = fyne.TextWrapWord
+		form.Append("Prompt", promptTextbox)
+
+		negativePromptTextbox := widget.NewMultiLineEntry()
+		negativePromptTextbox.SetText(png.NegativePrompt)
+		negativePromptTextbox.Wrapping = fyne.TextWrapWord
+		form.Append("Negative Prompt", negativePromptTextbox)
+
+		stepsTextbox := widget.NewEntry()
+		stepsTextbox.SetText(fmt.Sprint(png.Steps))
+		form.Append("Steps", stepsTextbox)
+
+		samplerTextbox := widget.NewEntry()
+		samplerTextbox.SetText(png.Sampler)
+		form.Append("Sampler", samplerTextbox)
+
+		cfgScaleTextbox := widget.NewEntry()
+		cfgScaleTextbox.SetText(fmt.Sprint(png.CFGScale))
+		form.Append("CFG Scale", cfgScaleTextbox)
+
+		seedTextbox := widget.NewEntry()
+		seedTextbox.SetText(fmt.Sprint(png.Seed))
+		form.Append("Seed", seedTextbox)
+
+		sizeTextbox := widget.NewEntry()
+		sizeTextbox.SetText(png.Size)
+		form.Append("Size", sizeTextbox)
+
+		modelHashTextbox := widget.NewEntry()
+		modelHashTextbox.SetText(png.ModelHash)
+		form.Append("Model Hash", modelHashTextbox)
+
+		// Set the window content to the grid layout
+		w.SetContent(form)
+
+		// Show and run the window
+		w.ShowAndRun()
 	}
 }

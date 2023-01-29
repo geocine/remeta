@@ -1,1 +1,1 @@
-go build -ldflags="-H windowsgui" -o remeta.exe main.go
+go1.20rc1 build -ldflags="-H windowsgui" -o remeta.exe main.go

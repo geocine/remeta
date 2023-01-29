@@ -2,8 +2,19 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\*\shell]
 
-[HKEY_CLASSES_ROOT\*\shell\Remove Metadata]
+[HKEY_CLASSES_ROOT\*\shell\ReMeta]
+"MUIVerb"="ReMeta"
+"AppliesTo"=".png"
+"SubCommands"="ReMeta.clear;ReMeta.get"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.clear]
 @="Remove Metadata"
 
-[HKEY_CLASSES_ROOT\*\shell\Remove Metadata\command]
-@="\"D:\\PL\\ReMeta\\remeta.exe\" \"clear\" \"%1\""
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.clear\command]
+@="D:\\SW\\bin\\remeta.exe clear \"%1\""
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.get]
+@="Get Metadata"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.get\command]
+@="D:\\SW\\bin\\remeta.exe get \"%1\""

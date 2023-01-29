@@ -2,21 +2,39 @@ module geocine.github.io/remeta
 
 go 1.19
 
-require golang.design/x/clipboard v0.6.3
+require fyne.io/fyne/v2 v2.3.0
 
 require (
-	github.com/dsoprea/go-exif v0.0.0-20221012082141-d21ac8e2de85 // indirect
-	github.com/dsoprea/go-exif/v2 v2.0.0-20221012082141-d21ac8e2de85 // indirect
-	github.com/dsoprea/go-logging v0.0.0-20200517223158-a10564966e9d // indirect
-	github.com/dsoprea/go-png-image-structure v0.0.0-20210512210324-29b889a6093d // indirect
-	github.com/dsoprea/go-utility v0.0.0-20200711062821-fab8125e9bdf // indirect
-	github.com/go-errors/errors v1.1.1 // indirect
-	github.com/golang/geo v0.0.0-20200319012246-673a6f80352d // indirect
-	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd // indirect
-	golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56 // indirect
-	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect
-	golang.org/x/mobile v0.0.0-20210716004757-34ab1303b554 // indirect
-	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
-	golang.org/x/sys v0.0.0-20210510120138-977fb7262007 // indirect
-	gopkg.in/yaml.v2 v2.3.0 // indirect
+	fyne.io/systray v1.10.1-0.20221115204952-d16a6177e6f1 // indirect
+	github.com/benoitkugler/textlayout v0.3.0 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/fredbi/uri v0.1.0 // indirect
+	github.com/fsnotify/fsnotify v1.5.4 // indirect
+	github.com/fyne-io/gl-js v0.0.0-20220119005834-d2da28d9ccfe // indirect
+	github.com/fyne-io/glfw-js v0.0.0-20220120001248-ee7290d23504 // indirect
+	github.com/fyne-io/image v0.0.0-20220602074514-4956b0afb3d2 // indirect
+	github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6 // indirect
+	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b // indirect
+	github.com/go-text/typesetting v0.0.0-20221212183139-1eb938670a1f // indirect
+	github.com/godbus/dbus/v5 v5.1.0 // indirect
+	github.com/goki/freetype v0.0.0-20220119013949-7a161fd3728c // indirect
+	github.com/gopherjs/gopherjs v1.17.2 // indirect
+	github.com/jsummers/gobmp v0.0.0-20151104160322-e2ba15ffa76e // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/srwiley/oksvg v0.0.0-20220731023508-a61f04f16b76 // indirect
+	github.com/srwiley/rasterx v0.0.0-20210519020934-456a8d69b780 // indirect
+	github.com/stretchr/testify v1.8.0 // indirect
+	github.com/tevino/abool v1.2.0 // indirect
+	github.com/yuin/goldmark v1.4.0 // indirect
+	golang.org/x/text v0.3.7 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+	honnef.co/go/js/dom v0.0.0-20210725211120-f030747120f2 // indirect
+)
+
+require (
+	fyne.io/fyne v1.4.3 // indirect
+	golang.org/x/image v0.0.0-20220601225756-64ec528b34cd // indirect
+	golang.org/x/mobile v0.0.0-20211207041440-4e6c2922fdee // indirect
+	golang.org/x/net v0.0.0-20211118161319-6a13c67c3ce4 // indirect
+	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 )
