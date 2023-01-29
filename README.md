@@ -47,16 +47,19 @@ Windows Registry Editor Version 5.00
 After you have modified and saved this just double click the `add.reg` file.
 
 Do you want to allow this app to make changes to your device? Yes (If asked)
-
 Then click Yes once this shows up
-
 ![image](https://user-images.githubusercontent.com/507464/215338709-6cbb23c0-379c-4a9b-95d3-e74d0a5c1656.png)
-
 
 
 ## Uninstallation
 
 Run `remove.reg` to remove ReMeta from the Windows context menu.
+
+Do you want to allow this app to make changes to your device? Yes (If asked)
+Then click Yes once this shows up
+![image](https://user-images.githubusercontent.com/507464/215338833-a1e7ea96-71c1-4a1d-8097-1d32d1c96a4c.png)
+
+------
 
 > Note: If you are not a developer you don't need to the information below
 
