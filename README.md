@@ -15,10 +15,10 @@ https://user-images.githubusercontent.com/507464/215329121-06af4bf1-341a-4970-82
 
 Download `ReMeta.zip` from [this link](https://github.com/geocine/remeta/releases/download/v1.0/ReMeta.zip) or go to [Releases page](https://github.com/geocine/remeta/releases) to get the latest one. Extract it to any folder. Inside the folder you will see 3 files: `remeta.exe`, `add.reg` and `remove.reg`. 
 
-Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`.
+Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin` with your path to `remeta.exe`.
 
 So if you downloaded `remeta.exe` to `C:\\tools` folder you need to change `add.reg` like this
-> Notice that you need to always use double `\` , eg. `C:\\the\\folder\\of\\remeta\\`
+> Notice that you need to always use double `\` , eg. `C:\\the\\folder\\of\\remeta`
 
 ```diff
 Windows Registry Editor Version 5.00
