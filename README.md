@@ -37,7 +37,7 @@ remeta read <image>
 
 ## Installation
 
-Build or download ReMeta from the Releases page and place it in any folder.
+Build or download `remeta.exe` from the [Releases page](https://github.com/geocine/remeta/releases) and place it in any folder.
 
 Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`. Then run `add.reg` to add ReMeta to the Windows context menu.
 
