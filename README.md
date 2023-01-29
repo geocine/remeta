@@ -13,7 +13,7 @@ https://user-images.githubusercontent.com/507464/215329121-06af4bf1-341a-4970-82
 
 ## Installation
 
-Download `remeta.exe` from the [Releases page](https://github.com/geocine/remeta/releases) and place it in any folder.
+Download `ReMeta.zip` from [this link](https://github.com/geocine/remeta/releases/download/v1.0/ReMeta.zip) or go to [Releases page](https://github.com/geocine/remeta/releases) to get the latest one. Extract it to any folder. Inside the folder you will see 3 files: `remeta.exe`, `add.reg` and `remove.reg`. 
 
 Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`.
 
