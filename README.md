@@ -25,11 +25,11 @@ Then build using the following command:
 ReMeta is a CLI tool so you can use it from the command line 
 Removing metadata from images. This will create a new image with the same name but with the suffix `_raw`:
 ```sh
-remeta clear <image>
+remeta remove <image>
 ```
 Reading metadata from images. This will open a window with the metadata:
 ```sh
-remeta get <image>
+remeta read <image>
 ```
 
 ## Installation

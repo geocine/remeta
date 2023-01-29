@@ -180,7 +180,7 @@ func main() {
 	mode := os.Args[1]
 	filePath := os.Args[2]
 
-	if mode == "clear" {
+	if mode == "remove" {
 		err := RemoveMetadata(filePath)
 		if err != nil {
 			fmt.Println(err)
@@ -205,7 +205,7 @@ func main() {
 		w.SetContent(content)
 		w.ShowAndRun()
 
-	} else if mode == "get" {
+	} else if mode == "read" {
 		imgFile, err := os.Open(filePath)
 		if err != nil {
 			panic(err)

@@ -11,10 +11,10 @@ Windows Registry Editor Version 5.00
 @="Remove Metadata"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.clear\command]
-@="D:\\SW\\bin\\remeta.exe clear \"%1\""
+@="D:\\SW\\bin\\remeta.exe remove \"%1\""
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.get]
 @="Get Metadata"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ReMeta.get\command]
-@="D:\\SW\\bin\\remeta.exe get \"%1\""
+@="D:\\SW\\bin\\remeta.exe read \"%1\""
