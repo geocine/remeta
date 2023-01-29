@@ -39,7 +39,7 @@ remeta read <image>
 
 Build or download ReMeta from the Releases page and place it in any folder.
 
-Modify path in to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`. Then run `add.reg` to add ReMeta to the Windows context menu.
+Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`. Then run `add.reg` to add ReMeta to the Windows context menu.
 
 ## Uninstallation
 
