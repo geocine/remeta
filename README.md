@@ -18,6 +18,7 @@ Download `ReMeta.zip` from [this link](https://github.com/geocine/remeta/release
 Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`.
 
 So if you downloaded `remeta.exe` to `C:\\tools` folder you need to change `add.reg` like this
+> Notice that you need to always use double `\` , eg. `C:\\the\\folder\\of\\remeta\\`
 
 ```diff
 Windows Registry Editor Version 5.00
