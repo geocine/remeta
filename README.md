@@ -11,6 +11,18 @@ https://user-images.githubusercontent.com/507464/215329121-06af4bf1-341a-4970-82
 
 > Note: This tool was specifically built for the Stable Diffusion Web UI. It may not work with other PNG images. This tool is only tested in Windows.
 
+## Installation
+
+Download `remeta.exe` from the [Releases page](https://github.com/geocine/remeta/releases) and place it in any folder.
+
+Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`. Then run `add.reg` to add ReMeta to the Windows context menu.
+
+## Uninstallation
+
+Run `remove.reg` to remove ReMeta from the Windows context menu.
+
+> Note: If you are not a developer you don't need to the information below
+
 ## Building
 
 You need to have `go1.20rc1` 
@@ -34,15 +46,4 @@ Reading metadata from images. This will open a window with the metadata:
 ```sh
 remeta read <image>
 ```
-
-## Installation
-
-Build or download `remeta.exe` from the [Releases page](https://github.com/geocine/remeta/releases) and place it in any folder.
-
-Modify path to `remeta.exe` in `add.reg`. Replace `D:\\SW\\bin\\` with your path to `remeta.exe`. Then run `add.reg` to add ReMeta to the Windows context menu.
-
-## Uninstallation
-
-Run `remove.reg` to remove ReMeta from the Windows context menu.
-
 
