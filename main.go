@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"flag"
 	"fmt"
 	"image"
 	"image/png"
@@ -172,18 +173,28 @@ func (png *PNG) populateInfo(input string) {
 }
 
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Println("Usage: remeta <mode> <image_file>")
+	var silent bool
+	flag.BoolVar(&silent, "s", false, "whether to run in silent mode")
+	flag.BoolVar(&silent, "silent", false, "whether to run in silent mode")
+
+	flag.Parse()
+
+	if flag.NArg() < 2 {
+		fmt.Println("Usage: remeta [-s|--silent] <mode> <image_file>")
 		return
 	}
 
-	mode := os.Args[1]
-	filePath := os.Args[2]
+	mode := flag.Arg(0)
+	filePath := flag.Arg(1)
 
 	if mode == "remove" {
 		err := RemoveMetadata(filePath)
 		if err != nil {
 			fmt.Println(err)
+			return
+		}
+
+		if silent {
 			return
 		}
 
