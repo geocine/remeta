@@ -187,6 +187,8 @@ func main() {
 	mode := flag.Arg(0)
 	filePath := flag.Arg(1)
 
+	name := filepath.Base(filePath)
+
 	if mode == "remove" {
 		err := RemoveMetadata(filePath)
 		if err != nil {
@@ -199,8 +201,6 @@ func main() {
 		}
 
 		a := app.New()
-
-		name := filepath.Base(filePath)
 
 		windowTitle := name + " - ReMeta by geocine"
 
@@ -229,7 +229,7 @@ func main() {
 		// Create a new Fyne app
 		a := app.New()
 
-		windowTitle := imgFile.Name() + " - ReMeta by geocine"
+		windowTitle := name + " - ReMeta by geocine"
 		// Create a new window
 		w := a.NewWindow(windowTitle)
 		w.Resize(fyne.NewSize(600, 0))
