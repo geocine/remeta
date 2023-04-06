@@ -223,6 +223,23 @@ func main() {
 		}
 		defer imgFile.Close()
 		text, _ := GetMetadata(imgFile)
+
+		if text == "" {
+			a := app.New()
+
+			windowTitle := name + " - ReMeta by geocine"
+
+			w := a.NewWindow(windowTitle)
+			w.Resize(fyne.NewSize(350, 100))
+			w.SetFixedSize(true)
+			w.CenterOnScreen()
+
+			content := container.NewCenter(widget.NewLabel("No metadata found in image."))
+			w.SetContent(content)
+			w.ShowAndRun()
+			return
+		}
+
 		png := PNG{}
 		png.populateInfo(text)
 
