@@ -83,8 +83,14 @@ Removing metadata from images. This will create a new image with the same name b
 ```sh
 remeta remove <image>
 ```
+You can remove in `silent` mode if you don't want to see a popup
+```sh
+remeta -s remove <image>
+```
 Reading metadata from images. This will open a window with the metadata:
 ```sh
 remeta read <image>
 ```
+
+
 
